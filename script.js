@@ -4,18 +4,18 @@ document.getElementById('oneRMForm').addEventListener('submit', function(e) {
     const weight = parseFloat(document.getElementById('weight').value);
     const reps = parseInt(document.getElementById('reps').value);
     
-    if (isNaN(weight) || isNaN(reps) || weight <= 0 || reps <= 0) {
+    if (isNaN(weight) || isNaN(reps) || weight <= 0 || reps < 1) {
         document.getElementById('result').textContent = 'Please enter valid numbers.';
         return;
     }
     
-    // Calculate 1RM using the Brzycki formula
+    // Calculate 1RM using the Lander formula or fallback to the Epley formula if needed
     const oneRM = calculateOneRM(weight, reps);
     const resultDiv = document.getElementById('result');
     
     // Display the 1RM result and apply the background color
-    resultDiv.textContent = `Your estimated 1RM is: ${oneRM.toFixed(1)} lbs`; // Round to nearest tenth
-    resultDiv.style.backgroundColor = '#e7f0ff'; // Apply the background color
+    resultDiv.textContent = `Your estimated 1RM is: ${oneRM.toFixed(1)} lbs`;
+    resultDiv.style.backgroundColor = '#e9f5ff'; // Apply the background color
     
     // Show the button to display percentage-based weights
     const showPercentagesBtn = document.getElementById('showPercentagesBtn');
@@ -29,8 +29,13 @@ document.getElementById('oneRMForm').addEventListener('submit', function(e) {
 });
 
 function calculateOneRM(weight, reps) {
-    // Brzycki Formula
-    return weight * (36 / (37 - reps));
+    // Lander Formula
+    let oneRM = weight * (100 / (101.3 - (2.67123 * reps)));
+    // Fallback to Epley Formula if Lander returns a negative number
+    if (oneRM < 0) {
+        oneRM = weight * (1 + reps / 30);
+    }
+    return oneRM;
 }
 
 function displayPercentageResults(oneRM) {
