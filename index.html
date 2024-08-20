@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1RM Calculator</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -19,6 +37,10 @@
             <button type="submit">Calculate 1RM</button>
         </form>
         <div id="result"></div>
+        
+        <!-- New Button and Results Section -->
+        <button id="showPercentagesBtn" style="display:none;">See your percentage-based weights</button>
+        <div id="percentageResults" style="display:none;"></div>
     </div>
     <script src="script.js"></script>
 </body>
