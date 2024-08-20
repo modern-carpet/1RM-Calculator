@@ -63,8 +63,8 @@ button:hover {
     font-weight: bold;
     font-size: 2rem; /* Increase the font size for emphasis */
     color: #333; /* A darker color for better readability */
-    border: 2px solid #007bff; /* Optional: Add a border for emphasis */
-    padding: 1rem; /* Add padding for better spacing */
+    border: 2px solid #007bff; /* Border for emphasis */
+    padding: 1rem; /* Padding for better spacing */
     border-radius: 10px; /* Rounded corners for a more elegant look */
     background-color: #e9f5ff; /* Light background color */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
