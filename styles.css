@@ -7,7 +7,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #f4f4f4;
 }
 
@@ -23,7 +23,8 @@ body {
 
 h1 {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    color: #007bff;
 }
 
 form {
@@ -33,14 +34,31 @@ form {
 
 label {
     margin-bottom: 0.5rem;
+    font-weight: bold;
 }
 
-input {
+input, select {
     padding: 0.75rem;
     margin-bottom: 1rem;
     border: 1px solid #ddd;
     border-radius: 3px;
     font-size: 1rem;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.input-group input {
+    flex: 2;
+    margin-bottom: 0;
+}
+
+.input-group select {
+    flex: 1;
+    margin-bottom: 0;
 }
 
 button {
@@ -51,47 +69,70 @@ button {
     border-radius: 3px;
     cursor: pointer;
     font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-#result {
+#result, #convertedWeight {
     margin-top: 1rem;
     text-align: center;
     font-weight: bold;
-    font-size: 2rem; /* Increase the font size for emphasis */
-    color: #333; /* A darker color for better readability */
-    border: 2px solid #007bff; /* Border for emphasis */
-    padding: 1rem; /* Padding for better spacing */
-    border-radius: 10px; /* Rounded corners for a more elegant look */
-    background-color: #e9f5ff; /* Light background color */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Elegant font */
+    font-size: 1.5rem;
+    color: #333;
+    border: 2px solid #007bff;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #e9f5ff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#convertedWeight {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
     .container {
-        padding: 1rem;
+        padding: 1.5rem;
         width: 95%;
-        max-width: 100%;
     }
 
-    input, button {
+    input, select, button {
         font-size: 1rem;
     }
 
     #result {
-        font-size: 1.5rem; /* Adjust font size for smaller screens */
+        font-size: 1.3rem;
+    }
+
+    #convertedWeight {
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    input, button {
+    .container {
+        padding: 1rem;
+    }
+
+    input, select, button {
         padding: 0.75rem;
         font-size: 0.9rem;
+    }
+
+    .input-group {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .input-group input, .input-group select {
+        width: 100%;
     }
 
     button {
@@ -99,7 +140,12 @@ button:hover {
     }
 
     #result {
-        font-size: 1.2rem; /* Further adjust for very small screens */
-        padding: 0.75rem; /* Adjust padding */
+        font-size: 1.1rem;
+        padding: 0.75rem;
+    }
+
+    #convertedWeight {
+        font-size: 0.9rem;
+        padding: 0.5rem;
     }
 }
