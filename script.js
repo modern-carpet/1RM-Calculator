@@ -14,7 +14,7 @@ document.getElementById('oneRMForm').addEventListener('submit', function(e) {
     const resultDiv = document.getElementById('result');
     
     // Display the 1RM result and apply the background color
-    resultDiv.textContent = `Your estimated 1RM is: ${oneRM.toFixed(2)} lbs`;
+    resultDiv.textContent = `Your estimated 1RM is: ${oneRM.toFixed(1)} lbs`; // Round to nearest tenth
     resultDiv.style.backgroundColor = '#e7f0ff'; // Apply the background color
     
     // Show the button to display percentage-based weights
@@ -46,7 +46,7 @@ function displayPercentageResults(oneRM) {
     table.style.borderCollapse = 'collapse';
     
     percentages.forEach(function(percentage) {
-        const weightForPercentage = (oneRM * (percentage / 100)).toFixed(2);
+        const weightForPercentage = (oneRM * (percentage / 100)).toFixed(1); // Round to nearest tenth
         const row = table.insertRow();
         const cell1 = row.insertCell(0);
         const cell2 = row.insertCell(1);
