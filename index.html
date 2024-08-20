@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1RM Calculator</title>
+    <title>1RM Calculator with Progress Tracking</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         table {
@@ -22,14 +22,77 @@
         button {
             margin-top: 20px;
         }
+        select {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 100%;
+        }
+        .bar-weight-btn {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: 1px solid #007bff;
+            background-color: white;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .bar-weight-btn.selected {
+            background-color: #007bff;
+            color: white;
+        }
+        #progressHistory {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        #progressHistory h3 {
+            margin-top: 0;
+        }
+        #progressList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #progressList li {
+            margin-bottom: 5px;
+        }
+        #saveProgressBtn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        #saveProgressBtn:hover {
+            background-color: #218838;
+        }
+        #liftType {
+            padding: 8px;
+            min-width: 200px;
+        }
+        #saveProgressContainer {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #saveProgressContainer select {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>1RM Calculator</h1>
         <form id="oneRMForm">
-            <label for="weight">Weight lifted (lbs):</label>
-            <input type="number" id="weight" required>
+            <label for="weight">Weight lifted:</label>
+            <div class="input-group">
+                <input type="number" id="weight" required>
+                <select id="unit">
+                    <option value="lbs">lbs</option>
+                    <option value="kg">kg</option>
+                </select>
+            </div>
             
             <label for="reps">Number of repetitions:</label>
             <input type="number" id="reps" required>
@@ -37,10 +100,50 @@
             <button type="submit">Calculate 1RM</button>
         </form>
         <div id="result"></div>
-        
-        <!-- New Button and Results Section -->
-        <button id="showPercentagesBtn" style="display:none;">See your percentage-based weights</button>
-        <div id="percentageResults" style="display:none;"></div>
+        <div id="percentageResults"></div>
+        <button id="convertUnitBtn" style="display:none;"></button>
+        <div id="saveProgressContainer" style="display:none;">
+            <button id="saveProgressBtn">Save This 1RM</button>
+            <select id="liftType">
+                <optgroup label="Squat Variations">
+                    <option value="Back Squat">Back Squat</option>
+                    <option value="Front Squat">Front Squat</option>
+                    <option value="Overhead Squat">Overhead Squat</option>
+                    <option value="Box Squat">Box Squat</option>
+                </optgroup>
+                <optgroup label="Press Variations">
+                    <option value="Bench Press">Bench Press</option>
+                    <option value="Incline Bench Press">Incline Bench Press</option>
+                    <option value="Decline Bench Press">Decline Bench Press</option>
+                    <option value="Strict Press">Strict Press</option>
+                    <option value="Push Press">Push Press</option>
+                    <option value="Push Jerk">Push Jerk</option>
+                    <option value="Split Jerk">Split Jerk</option>
+                </optgroup>
+                <optgroup label="Deadlift Variations">
+                    <option value="Deadlift">Deadlift</option>
+                    <option value="Sumo Deadlift">Sumo Deadlift</option>
+                    <option value="Romanian Deadlift">Romanian Deadlift</option>
+                    <option value="Trap Bar Deadlift">Trap Bar Deadlift</option>
+                    <option value="Bent-Over Row">Bent-Over Row</option>
+                </optgroup>
+                <optgroup label="Olympic Lifts">
+                    <option value="Power Clean">Power Clean</option>
+                    <option value="Squat Clean">Squat Clean</option>
+                    <option value="Power Snatch">Power Snatch</option>
+                    <option value="Squat Snatch">Squat Snatch</option>
+                    <option value="Clean and Jerk">Clean and Jerk</option>
+                </optgroup>
+                <optgroup label="Other Compound Lifts">
+                    <option value="Pull-Up">Pull-Up</option>
+                    <option value="Dip">Dip</option>
+                </optgroup>
+            </select>
+        </div>
+        <div id="progressHistory" style="display:none;">
+            <h3>Progress History</h3>
+            <ul id="progressList"></ul>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
