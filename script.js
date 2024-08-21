@@ -27,6 +27,21 @@ function calculateOneRM(weight, reps) {
     return oneRM;
 }
 
+document.getElementById('unit').addEventListener('change', function() {
+    const newUnit = this.value;
+    if (newUnit !== globalUnit) {
+        if (newUnit === 'kg') {
+            globalOneRM *= 0.453592;
+            globalBarWeight = Math.round(globalBarWeight * 0.453592);
+        } else {
+            globalOneRM *= 2.20462;
+            globalBarWeight = Math.round(globalBarWeight * 2.20462);
+        }
+        globalUnit = newUnit;
+        updateResults();
+    }
+});
+
 function updateResults() {
     const resultDiv = document.getElementById('result');
     resultDiv.textContent = `Your estimated 1RM is: ${globalOneRM.toFixed(1)} ${globalUnit}`;
@@ -34,11 +49,6 @@ function updateResults() {
     
     displayPercentageResults();
     
-    // Update convert button
-    const convertUnitBtn = document.getElementById('convertUnitBtn');
-    convertUnitBtn.textContent = `Convert to ${globalUnit === 'lbs' ? 'kg' : 'lbs'}`;
-    convertUnitBtn.style.display = 'block';
-
     // Show save progress container
     document.getElementById('saveProgressContainer').style.display = 'flex';
 }
@@ -83,7 +93,8 @@ function displayPercentageResults() {
     const noteRow = table.insertRow();
     const noteCell = noteRow.insertCell(0);
     noteCell.colSpan = 3;
-    noteCell.innerHTML = `Note: Plate loading is calculated for a ${globalBarWeight} ${globalUnit} bar.`;
+    const kgBarWeight = (globalBarWeight * 0.453592).toFixed(0);
+    noteCell.innerHTML = `Note: Plate loading is calculated for a ${globalBarWeight} lb / ${kgBarWeight} kg bar.`;
     noteCell.style.border = '1px solid #ddd';
     noteCell.style.padding = '8px';
     noteCell.style.fontStyle = 'italic';
@@ -96,12 +107,15 @@ function displayPercentageResults() {
     
     barWeightCell.appendChild(document.createTextNode('Select bar weight for plate loading: '));
     
-    const barWeights = globalUnit === 'lbs' ? [45, 35, 25] : [20, 15, 10];
+    const barWeights = [45, 35, 25];
     barWeights.forEach(weight => {
         const btn = document.createElement('button');
-        btn.textContent = `${weight} ${globalUnit}`;
+        const kgWeight = (weight * 0.453592).toFixed(0);
+        btn.textContent = `${weight} lbs / ${kgWeight} kg`;
         btn.className = 'bar-weight-btn';
-        if (weight === globalBarWeight) btn.classList.add('selected');
+        if (weight === globalBarWeight) {
+            btn.classList.add('selected');
+        }
         btn.onclick = function() {
             globalBarWeight = weight;
             updateResults();
@@ -113,14 +127,13 @@ function displayPercentageResults() {
 }
 
 function calculatePlateLoading(weight) {
-    const barWeight = globalBarWeight;
-    let remainingWeight = Math.max(0, weight - barWeight);
+    let remainingWeight = Math.max(0, weight - globalBarWeight);
     const plates = globalUnit === 'lbs' 
         ? [45, 35, 25, 10, 5, 2.5] 
         : [25, 20, 15, 10, 5, 2.5, 1.25];
     let loading = '';
 
-    if (weight <= barWeight) {
+    if (weight <= globalBarWeight) {
         return 'Just the bar';
     }
 
@@ -137,28 +150,9 @@ function calculatePlateLoading(weight) {
     return loading.trim() || 'Just the bar';
 }
 
-document.getElementById('convertUnitBtn').addEventListener('click', function() {
-    globalOneRM = globalUnit === 'lbs' ? globalOneRM * 0.453592 : globalOneRM * 2.20462;
-    globalUnit = globalUnit === 'lbs' ? 'kg' : 'lbs';
-    
-    if (globalUnit === 'lbs') {
-        globalBarWeight = Math.round(globalBarWeight * 2.20462);
-        if (globalBarWeight > 40) globalBarWeight = 45;
-        else if (globalBarWeight > 30) globalBarWeight = 35;
-        else globalBarWeight = 25;
-    } else {
-        globalBarWeight = Math.round(globalBarWeight * 0.453592);
-        if (globalBarWeight > 17) globalBarWeight = 20;
-        else if (globalBarWeight > 12) globalBarWeight = 15;
-        else globalBarWeight = 10;
-    }
-    
-    updateResults();
-});
-
 function saveProgress() {
     const date = new Date().toLocaleDateString();
-    const liftType = document.getElementById('liftTypeSearch').value;
+    const liftType = document.getElementById('liftType').value;
     progressHistory.push({ date, liftType, oneRM: globalOneRM, unit: globalUnit });
     localStorage.setItem('1RMProgressHistory', JSON.stringify(progressHistory));
     displayProgressHistory();
@@ -196,41 +190,8 @@ function loadProgressHistory() {
     }
 }
 
-function setupLiftTypeSearch() {
-    const searchInput = document.getElementById('liftTypeSearch');
-    const liftTypeSelect = document.getElementById('liftType');
-    const liftOptions = liftTypeSelect.getElementsByTagName('option');
-
-    searchInput.addEventListener('focus', () => {
-        liftTypeSelect.style.display = 'block';
-    });
-
-    searchInput.addEventListener('blur', () => {
-        setTimeout(() => {
-            liftTypeSelect.style.display = 'none';
-        }, 200);
-    });
-
-    searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        for (let option of liftOptions) {
-            const optionText = option.textContent.toLowerCase();
-            if (optionText.includes(searchTerm)) {
-                option.style.display = '';
-            } else {
-                option.style.display = 'none';
-            }
-        }
-    });
-
-    liftTypeSelect.addEventListener('change', () => {
-        searchInput.value = liftTypeSelect.options[liftTypeSelect.selectedIndex].text;
-    });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     loadProgressHistory();
-    setupLiftTypeSearch();
 });
 
 document.getElementById('saveProgressBtn').addEventListener('click', saveProgress);
