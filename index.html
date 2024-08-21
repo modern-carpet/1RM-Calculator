@@ -57,7 +57,7 @@
             margin-bottom: 5px;
         }
         #saveProgressBtn {
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             padding: 10px 15px;
@@ -65,7 +65,7 @@
             margin-right: 10px;
         }
         #saveProgressBtn:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
         #liftType {
             padding: 8px;
@@ -100,8 +100,6 @@
             <button type="submit">Calculate 1RM</button>
         </form>
         <div id="result"></div>
-        <div id="percentageResults"></div>
-        <button id="convertUnitBtn" style="display:none;"></button>
         <div id="saveProgressContainer" style="display:none;">
             <button id="saveProgressBtn">Save This 1RM</button>
             <select id="liftType">
@@ -140,6 +138,7 @@
                 </optgroup>
             </select>
         </div>
+        <div id="percentageResults"></div>
         <div id="progressHistory" style="display:none;">
             <h3>Progress History</h3>
             <ul id="progressList"></ul>
