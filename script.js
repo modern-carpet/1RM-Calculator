@@ -44,7 +44,7 @@ document.getElementById('unit').addEventListener('change', function() {
 
 function updateResults() {
     const resultDiv = document.getElementById('result');
-    resultDiv.textContent = `Your estimated 1RM is: ${globalOneRM.toFixed(1)} ${globalUnit}`;
+    resultDiv.innerHTML = `Your estimated 1RM is:<br>${globalOneRM.toFixed(1)} ${globalUnit}`;
     resultDiv.style.backgroundColor = '#e9f5ff';
     
     displayPercentageResults();
@@ -93,8 +93,12 @@ function displayPercentageResults() {
     const noteRow = table.insertRow();
     const noteCell = noteRow.insertCell(0);
     noteCell.colSpan = 3;
-    const kgBarWeight = (globalBarWeight * 0.453592).toFixed(0);
-    noteCell.innerHTML = `Note: Plate loading is calculated for a ${globalBarWeight} lb / ${kgBarWeight} kg bar.`;
+    const otherUnitBarWeight = globalUnit === 'lbs' ? 
+        (globalBarWeight * 0.453592).toFixed(0) : 
+        (globalBarWeight * 2.20462).toFixed(0);
+    const primaryUnit = globalUnit === 'lbs' ? 'lb' : 'kg';
+    const secondaryUnit = globalUnit === 'lbs' ? 'kg' : 'lb';
+    noteCell.innerHTML = `Note: Plate loading is calculated for a ${globalBarWeight} ${primaryUnit} / ${otherUnitBarWeight} ${secondaryUnit} bar.`;
     noteCell.style.border = '1px solid #ddd';
     noteCell.style.padding = '8px';
     noteCell.style.fontStyle = 'italic';
@@ -107,11 +111,13 @@ function displayPercentageResults() {
     
     barWeightCell.appendChild(document.createTextNode('Select bar weight for plate loading: '));
     
-    const barWeights = [45, 35, 25];
+    const barWeights = globalUnit === 'lbs' ? [45, 35, 25] : [20, 15, 10];
     barWeights.forEach(weight => {
         const btn = document.createElement('button');
-        const kgWeight = (weight * 0.453592).toFixed(0);
-        btn.textContent = `${weight} lbs / ${kgWeight} kg`;
+        const otherUnitWeight = globalUnit === 'lbs' ? 
+            (weight * 0.453592).toFixed(0) : 
+            (weight * 2.20462).toFixed(0);
+        btn.textContent = `${weight} ${primaryUnit} / ${otherUnitWeight} ${secondaryUnit}`;
         btn.className = 'bar-weight-btn';
         if (weight === globalBarWeight) {
             btn.classList.add('selected');
@@ -149,7 +155,6 @@ function calculatePlateLoading(weight) {
 
     return loading.trim() || 'Just the bar';
 }
-
 function saveProgress() {
     const date = new Date().toLocaleDateString();
     const liftType = document.getElementById('liftType').value;
