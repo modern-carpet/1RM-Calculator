@@ -17,6 +17,17 @@ document.getElementById('oneRMForm').addEventListener('submit', function(e) {
     
     globalOneRM = calculateOneRM(weight, reps);
     updateResults();
+
+    // Move the result div above the save progress container
+    const saveProgressContainer = document.getElementById('saveProgressContainer');
+    const resultDiv = document.getElementById('result');
+    saveProgressContainer.parentNode.insertBefore(resultDiv, saveProgressContainer);
+    
+    // Show save progress container
+    saveProgressContainer.style.display = 'flex';
+    
+    // Scroll to the result
+    resultDiv.scrollIntoView({ behavior: 'smooth' });
 });
 
 function calculateOneRM(weight, reps) {
@@ -155,12 +166,20 @@ function calculatePlateLoading(weight) {
 
     return loading.trim() || 'Just the bar';
 }
+
 function saveProgress() {
     const date = new Date().toLocaleDateString();
     const liftType = document.getElementById('liftType').value;
     progressHistory.push({ date, liftType, oneRM: globalOneRM, unit: globalUnit });
     localStorage.setItem('1RMProgressHistory', JSON.stringify(progressHistory));
     displayProgressHistory();
+
+    // Move progress history to the correct position
+    const saveProgressContainer = document.getElementById('saveProgressContainer');
+    const progressHistoryDiv = document.getElementById('progressHistory');
+    const percentageResultsDiv = document.getElementById('percentageResults');
+    
+    saveProgressContainer.parentNode.insertBefore(progressHistoryDiv, percentageResultsDiv);
 }
 
 function displayProgressHistory() {
@@ -187,16 +206,15 @@ function displayProgressHistory() {
     progressHistoryDiv.style.display = progressHistory.length > 0 ? 'block' : 'none';
 }
 
-function loadProgressHistory() {
-    const savedHistory = localStorage.getItem('1RMProgressHistory');
-    if (savedHistory) {
-        progressHistory = JSON.parse(savedHistory);
-        displayProgressHistory();
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     loadProgressHistory();
+    
+    // Ensure correct initial positioning of progress history
+    const saveProgressContainer = document.getElementById('saveProgressContainer');
+    const progressHistoryDiv = document.getElementById('progressHistory');
+    const percentageResultsDiv = document.getElementById('percentageResults');
+    
+    saveProgressContainer.parentNode.insertBefore(progressHistoryDiv, percentageResultsDiv);
 });
 
 document.getElementById('saveProgressBtn').addEventListener('click', saveProgress);
